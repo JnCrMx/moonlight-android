@@ -7,6 +7,7 @@ import com.limelight.binding.input.ControllerHandler;
 import com.limelight.binding.input.KeyboardTranslator;
 import com.limelight.binding.input.capture.InputCaptureManager;
 import com.limelight.binding.input.capture.InputCaptureProvider;
+import com.limelight.binding.input.driver.BluetoothDriverService;
 import com.limelight.binding.input.touch.AbsoluteTouchContext;
 import com.limelight.binding.input.touch.RelativeTouchContext;
 import com.limelight.binding.input.driver.UsbDriverService;
@@ -167,6 +168,19 @@ public class Game extends Activity implements SurfaceHolder.Callback,
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             connectedToUsbDriverService = false;
+        }
+    };
+    private ServiceConnection bluetoothDriverServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            BluetoothDriverService.BluetoothDriverBinder binder = (BluetoothDriverService.BluetoothDriverBinder) iBinder;
+            binder.setListener(controllerHandler);
+            binder.start();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
         }
     };
 
@@ -529,6 +543,8 @@ public class Game extends Activity implements SurfaceHolder.Callback,
             bindService(new Intent(this, UsbDriverService.class),
                     usbDriverServiceConnection, Service.BIND_AUTO_CREATE);
         }
+        bindService(new Intent(this, BluetoothDriverService.class),
+                bluetoothDriverServiceConnection, Service.BIND_AUTO_CREATE);
 
         if (!decoderRenderer.isAvcSupported()) {
             if (spinner != null) {
@@ -1097,6 +1113,7 @@ public class Game extends Activity implements SurfaceHolder.Callback,
             // Unbind from the discovery service
             unbindService(usbDriverServiceConnection);
         }
+        unbindService(bluetoothDriverServiceConnection);
 
         // Destroy the capture provider
         inputCaptureProvider.destroy();
