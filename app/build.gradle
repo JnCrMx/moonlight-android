@@ -144,4 +144,7 @@ dependencies {
     // 3.5.8 requires minSdk 19, uses StandardCharsets.UTF_8 internally
     implementation 'org.jmdns:jmdns:3.5.7'
     implementation 'com.github.cgutman:ShieldControllerExtensions:1.0.1'
+
+    implementation 'androidx.activity:activity:1.2.0'
+    implementation 'androidx.fragment:fragment:1.3.0'
 }
