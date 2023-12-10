@@ -80,6 +80,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -89,7 +94,7 @@ import java.security.cert.X509Certificate;
 import java.util.Locale;
 
 
-public class Game extends Activity implements SurfaceHolder.Callback,
+public class Game extends FragmentActivity implements SurfaceHolder.Callback,
         OnGenericMotionListener, OnTouchListener, NvConnectionListener, EvdevListener,
         OnSystemUiVisibilityChangeListener, GameGestures, StreamView.InputCallbacks,
         PerfOverlayListener, UsbDriverService.UsbDriverStateListener, View.OnKeyListener {
@@ -183,6 +188,15 @@ public class Game extends Activity implements SurfaceHolder.Callback,
 
         }
     };
+    private final ActivityResultLauncher<String> requestBluetoothPermissionLauncher =
+        this.registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                bindService(new Intent(this, BluetoothDriverService.class),
+                        bluetoothDriverServiceConnection, Service.BIND_AUTO_CREATE);
+            } else {
+                Toast.makeText(this, "Permission denied. Steam Controllers will not work.", Toast.LENGTH_LONG).show();
+            }
+        });
 
     public static final String EXTRA_HOST = "Host";
     public static final String EXTRA_PORT = "Port";
@@ -543,8 +557,16 @@ public class Game extends Activity implements SurfaceHolder.Callback,
             bindService(new Intent(this, UsbDriverService.class),
                     usbDriverServiceConnection, Service.BIND_AUTO_CREATE);
         }
-        bindService(new Intent(this, BluetoothDriverService.class),
-                bluetoothDriverServiceConnection, Service.BIND_AUTO_CREATE);
+        if (prefConfig.bluetoothDriver && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(
+                    getApplicationContext(),
+                    android.Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                bindService(new Intent(this, BluetoothDriverService.class),
+                        bluetoothDriverServiceConnection, Service.BIND_AUTO_CREATE);
+            } else {
+                requestBluetoothPermissionLauncher.launch(android.Manifest.permission.BLUETOOTH_CONNECT);
+            }
+        }
 
         if (!decoderRenderer.isAvcSupported()) {
             if (spinner != null) {
