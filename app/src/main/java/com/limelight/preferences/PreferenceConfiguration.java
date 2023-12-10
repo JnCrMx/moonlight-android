@@ -35,6 +35,7 @@ public class PreferenceConfiguration {
     private static final String MULTI_CONTROLLER_PREF_STRING = "checkbox_multi_controller";
     static final String AUDIO_CONFIG_PREF_STRING = "list_audio_config";
     private static final String USB_DRIVER_PREF_SRING = "checkbox_usb_driver";
+    private static final String BLUETOOTH_DRIVER_PREF_SRING = "checkbox_bluetooth_driver";
     private static final String VIDEO_FORMAT_PREF_STRING = "video_format";
     private static final String ONSCREEN_CONTROLLER_PREF_STRING = "checkbox_show_onscreen_controls";
     private static final String ONLY_L3_R3_PREF_STRING = "checkbox_only_show_L3R3";
@@ -71,6 +72,7 @@ public class PreferenceConfiguration {
     public static final String DEFAULT_LANGUAGE = "default";
     private static final boolean DEFAULT_MULTI_CONTROLLER = true;
     private static final boolean DEFAULT_USB_DRIVER = true;
+    private static final boolean DEFAULT_BLUETOOTH_DRIVER = false;
     private static final String DEFAULT_VIDEO_FORMAT = "auto";
 
     private static final boolean ONSCREEN_CONTROLLER_DEFAULT = false;
@@ -117,7 +119,7 @@ public class PreferenceConfiguration {
     public int oscOpacity;
     public boolean stretchVideo, enableSops, playHostAudio, disableWarnings;
     public String language;
-    public boolean smallIconMode, multiController, usbDriver, flipFaceButtons;
+    public boolean smallIconMode, multiController, usbDriver, bluetoothDriver, flipFaceButtons;
     public boolean onscreenController;
     public boolean onlyL3R3;
     public boolean enableHdr;
@@ -546,6 +548,7 @@ public class PreferenceConfiguration {
         config.smallIconMode = prefs.getBoolean(SMALL_ICONS_PREF_STRING, getDefaultSmallMode(context));
         config.multiController = prefs.getBoolean(MULTI_CONTROLLER_PREF_STRING, DEFAULT_MULTI_CONTROLLER);
         config.usbDriver = prefs.getBoolean(USB_DRIVER_PREF_SRING, DEFAULT_USB_DRIVER);
+        config.bluetoothDriver = prefs.getBoolean(BLUETOOTH_DRIVER_PREF_SRING, DEFAULT_BLUETOOTH_DRIVER);
         config.onscreenController = prefs.getBoolean(ONSCREEN_CONTROLLER_PREF_STRING, ONSCREEN_CONTROLLER_DEFAULT);
         config.onlyL3R3 = prefs.getBoolean(ONLY_L3_R3_PREF_STRING, ONLY_L3_R3_DEFAULT);
         config.enableHdr = prefs.getBoolean(ENABLE_HDR_PREF_STRING, DEFAULT_ENABLE_HDR) && !isShieldAtvFirmwareWithBrokenHdr();

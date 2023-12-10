@@ -192,7 +192,7 @@ public class SteamController extends AbstractController {
     private static final int BLELeftTrackpadChunk = 0x100;
     private static final int BLERightTrackpadChunk = 0x200;
 
-    protected boolean handleRead(ByteBuffer buffer) {
+    protected void handleRead(ByteBuffer buffer) {
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         buffer.get(); // skip first byte
 
@@ -262,7 +262,6 @@ public class SteamController extends AbstractController {
 
         reportInput();
 
-        return true;
     }
 
     @Override
@@ -277,6 +276,11 @@ public class SteamController extends AbstractController {
 
     @Override
     public void rumble(short lowFreqMotor, short highFreqMotor) {
+        // TODO: Implement rumble
+    }
+
+    @Override
+    public void rumbleTriggers(short leftTrigger, short rightTrigger) {
         // TODO: Implement rumble
     }
 

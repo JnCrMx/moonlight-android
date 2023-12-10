@@ -179,6 +179,8 @@
     <string name="summary_checkbox_xb1_driver">Enables a built-in USB driver for devices without native Xbox controller support</string>
     <string name="title_checkbox_usb_bind_all">Override native Xbox gamepad support</string>
     <string name="summary_checkbox_usb_bind_all">Use Moonlight\'s USB driver for all supported gamepads, even if native Xbox controller support is present</string>
+    <string name="title_checkbox_bt_driver">Steam Controller driver</string>
+    <string name="summary_checkbox_bt_driver">Enables a built-in Bluetooth driver for the Steam Controller</string>
     <string name="title_checkbox_mouse_emulation">Mouse emulation via gamepad</string>
     <string name="summary_checkbox_mouse_emulation">Long pressing the Start button will switch the gamepad into mouse mode</string>
     <string name="title_checkbox_flip_face_buttons">Flip face buttons</string>
